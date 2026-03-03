@@ -7,6 +7,11 @@ import { useAuth } from "./context/AuthContext";
 function App() {
   const { authState } = useAuth(); // usuario logueado y rol
 
+  if (authState.loading) {
+    // Mientras consultamos /api/auth/me, mostrar un loader simple
+    return <div>Cargando...</div>;
+  }
+
   return (
     <BrowserRouter>
       <Routes>

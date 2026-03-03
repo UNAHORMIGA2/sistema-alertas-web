@@ -1,3 +1,4 @@
+// src/context/AuthContext.js
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,7 +11,8 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const res = await axios.get("/api/auth/me", { withCredentials: true });
-        setAuthState({ user: res.data.usuario, loading: false });
+        // ⚡ Cambiamos de res.data.usuario → res.data.user
+        setAuthState({ user: res.data.user, loading: false });
       } catch {
         setAuthState({ user: null, loading: false });
       }
