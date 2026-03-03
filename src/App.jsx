@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -26,9 +25,7 @@ function ProtectedRoute({ children, allowedRoles }) {
   }, []);
 
   if (loading) return <div>Cargando...</div>;
-
   if (!user) return <Navigate to="/" />;
-
   if (allowedRoles && !allowedRoles.includes(user.rol)) {
     return <Navigate to="/dashboard" />;
   }
@@ -42,7 +39,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
 
-        {/* Dashboard ciudadano */}
         <Route
           path="/dashboard"
           element={
@@ -52,7 +48,6 @@ function App() {
           }
         />
 
-        {/* Panel Admin */}
         <Route
           path="/admin"
           element={
@@ -65,3 +60,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
+export default App;

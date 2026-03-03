@@ -3,7 +3,6 @@ import React from "react";
 export default function Login() {
 
   const handleLogin = () => {
-    // 🔐 Redirige al backend para iniciar OAuth real
     window.location.href =
       "https://backend-emergencias.onrender.com/api/auth/login/google";
   };
