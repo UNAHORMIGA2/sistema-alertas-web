@@ -1,61 +1,33 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-
-axios.defaults.withCredentials = true;
-
-function ProtectedRoute({ children, allowedRoles }) {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get("https://backend-emergencias.onrender.com/api/auth/me")
-      .then((res) => {
-        setUser(res.data.user);
-        setLoading(false);
-      })
-      .catch(() => {
-        setUser(null);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <div>Cargando...</div>;
-  if (!user) return <Navigate to="/" />;
-  if (allowedRoles && !allowedRoles.includes(user.rol)) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  return children;
-}
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { authState } = useAuth(); // usuario logueado y rol
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* Ruta pública: Login */}
+        <Route path="/login" element={<Login />} />
 
+        {/* Dashboard solo accesible por admins y superadmins */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute
+              allowedRoles={["admin", "superadmin"]}
+              user={authState.user}
+            >
               <Dashboard />
             </ProtectedRoute>
           }
         />
 
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        {/* Fallback: cualquier otra ruta redirige a login */}
+        <Route path="*" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
