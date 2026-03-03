@@ -11,11 +11,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Ruta pública: Login */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
 
         {/* Dashboard solo accesible por admins y superadmins */}
         <Route
-          path="/dashboard"
+          path="/Dashboard"
           element={
             <ProtectedRoute
               allowedRoles={["admin", "superadmin"]}
